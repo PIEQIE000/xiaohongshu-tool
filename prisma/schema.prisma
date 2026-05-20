@@ -1,0 +1,87 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model Topic {
+  id        String   @id @default(uuid())
+  title     String
+  tags      String   @default("")
+  status    String   @default("pending")
+  note      String   @default("")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  contents  Content[]
+}
+
+model Content {
+  id              String          @id @default(uuid())
+  topicId         String?
+  topic           Topic?          @relation(fields: [topicId], references: [id], onDelete: SetNull)
+  title           String          @default("")
+  body            String          @default("")
+  tags            String          @default("")
+  versions        String          @default("")
+  images          String          @default("")
+  scheduledAt     String?
+  publishedAt     String?
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+  calendarEntries CalendarEntry[]
+  metrics         Metric[]
+}
+
+model Asset {
+  id        String   @id @default(uuid())
+  type      String
+  url       String
+  title     String   @default("")
+  tags      String   @default("")
+  createdAt DateTime @default(now())
+}
+
+model CalendarEntry {
+  id        String   @id @default(uuid())
+  contentId String
+  content   Content  @relation(fields: [contentId], references: [id], onDelete: Cascade)
+  date      String
+  status    String   @default("scheduled")
+  createdAt DateTime @default(now())
+}
+
+model Metric {
+  id        String   @id @default(uuid())
+  contentId String
+  content   Content  @relation(fields: [contentId], references: [id], onDelete: Cascade)
+  likes     Int      @default(0)
+  collects  Int      @default(0)
+  comments  Int      @default(0)
+  views     Int      @default(0)
+  date      String
+  createdAt DateTime @default(now())
+}
+
+model PromptTemplate {
+  id        String   @id @default(uuid())
+  name      String
+  category  String
+  content   String
+  variables String   @default("")
+  isDefault Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model MaterialSnippet {
+  id        String   @id @default(uuid())
+  type      String
+  title     String
+  content   String
+  tags      String   @default("")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

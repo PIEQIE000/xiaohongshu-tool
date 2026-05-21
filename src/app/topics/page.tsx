@@ -94,13 +94,13 @@ export default function TopicsPage() {
   const columns = ["pending", "writing", "done", "published"]
 
   return (
-    <div className="p-6">
-      <div className="flex items-center justify-between mb-6">
+    <div className="p-4 md:p-6">
+      <div className="flex items-center justify-between mb-4 md:mb-6">
         <div>
-          <h1 className="text-2xl font-bold">选题管理</h1>
+          <h1 className="text-xl md:text-2xl font-bold">选题管理</h1>
           <p className="text-sm text-muted-foreground mt-1">管理你的内容选题和写作计划</p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
           <Button variant={viewMode === "list" ? "default" : "outline"} size="sm" onClick={() => setViewMode("list")}>
             列表
           </Button>
@@ -113,7 +113,7 @@ export default function TopicsPage() {
         </div>
       </div>
 
-      <div className="flex gap-3 mb-6">
+      <div className="flex flex-col sm:flex-row gap-2 md:gap-3 mb-4 md:mb-6">
         <div className="relative flex-1">
           <Search className="absolute left-3 top-2.5 w-4 h-4 text-muted-foreground" />
           <Input
@@ -179,7 +179,7 @@ export default function TopicsPage() {
           )}
         </div>
       ) : (
-        <div className="grid grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {columns.map((status) => (
             <div key={status} className="space-y-3">
               <h3 className="text-sm font-semibold text-muted-foreground flex items-center gap-2">
@@ -228,7 +228,7 @@ export default function TopicsPage() {
 
       {showCreate && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <Card className="w-[480px]">
+          <Card className="w-full max-w-lg mx-4">
             <div className="p-6">
               <h2 className="text-lg font-semibold mb-4">新建选题</h2>
               <div className="space-y-4">

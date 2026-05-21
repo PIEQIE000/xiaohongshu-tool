@@ -42,17 +42,17 @@ export default function AnalyticsPage() {
   const totalViews = metrics.reduce((a, b) => a + b.views, 0)
 
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-6">数据复盘</h1>
+    <div className="p-4 md:p-6">
+      <h1 className="text-xl md:text-2xl font-bold mb-4 md:mb-6">数据复盘</h1>
 
-      <div className="grid grid-cols-4 gap-4 mb-6">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 md:gap-4 mb-4 md:mb-6">
         <Card><CardContent className="py-4 text-center"><p className="text-sm text-muted-foreground">总点赞</p><p className="text-3xl font-bold text-red-500">{totalLikes}</p></CardContent></Card>
         <Card><CardContent className="py-4 text-center"><p className="text-sm text-muted-foreground">总收藏</p><p className="text-3xl font-bold text-amber-500">{totalCollects}</p></CardContent></Card>
         <Card><CardContent className="py-4 text-center"><p className="text-sm text-muted-foreground">总评论</p><p className="text-3xl font-bold text-blue-500">{totalComments}</p></CardContent></Card>
         <Card><CardContent className="py-4 text-center"><p className="text-sm text-muted-foreground">总阅读</p><p className="text-3xl font-bold text-green-500">{totalViews}</p></CardContent></Card>
       </div>
 
-      <div className="grid grid-cols-2 gap-6 mb-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6 mb-4 md:mb-6">
         <Card>
           <CardContent className="py-4">
             <h3 className="text-sm font-semibold mb-4">数据趋势</h3>
@@ -89,7 +89,7 @@ export default function AnalyticsPage() {
       <Card>
         <CardContent className="py-4">
           <h3 className="text-sm font-semibold mb-4">录入数据</h3>
-          <div className="grid grid-cols-6 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 md:gap-3">
             <div><label className="text-xs text-muted-foreground mb-1 block">日期</label><Input type="date" value={formDate} onChange={(e) => setFormDate(e.target.value)} /></div>
             <div><label className="text-xs text-muted-foreground mb-1 block">点赞</label><Input type="number" value={formLikes} onChange={(e) => setFormLikes(Number(e.target.value))} /></div>
             <div><label className="text-xs text-muted-foreground mb-1 block">收藏</label><Input type="number" value={formCollects} onChange={(e) => setFormCollects(Number(e.target.value))} /></div>

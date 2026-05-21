@@ -27,6 +27,8 @@ model Content {
   tags            String          @default("")
   versions        String          @default("")
   images          String          @default("")
+  contentType     String          @default("knowledge")
+  publishHook     String          @default("私信发图纸，源头工厂直接报价。主页有联系方式，没有中间商差价。")
   scheduledAt     String?
   publishedAt     String?
   createdAt       DateTime        @default(now())
@@ -36,12 +38,15 @@ model Content {
 }
 
 model Asset {
-  id        String   @id @default(uuid())
-  type      String
-  url       String
-  title     String   @default("")
-  tags      String   @default("")
-  createdAt DateTime @default(now())
+  id         String    @id @default(uuid())
+  type       String
+  url        String
+  title      String    @default("")
+  tags       String    @default("")
+  usageCount Int       @default(0)
+  lastUsedAt DateTime?
+  isFatigued Boolean   @default(false)
+  createdAt  DateTime  @default(now())
 }
 
 model CalendarEntry {
@@ -84,4 +89,16 @@ model MaterialSnippet {
   tags      String   @default("")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model MaterialTask {
+  id            String    @id @default(uuid())
+  title         String
+  description   String    @default("")
+  requiredTypes String    @default("")
+  requiredCount Int       @default(5)
+  status        String    @default("pending")
+  dueDate       String?
+  completedAt   DateTime?
+  createdAt     DateTime  @default(now())
 }

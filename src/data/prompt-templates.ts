@@ -1,7 +1,7 @@
 export interface PromptTemplate {
   id: string
   name: string
-  category: "knowledge" | "visual" | "faq"
+  category: "knowledge" | "visual" | "faq" | "auto"
   content: string
   variables: string[]
   isDefault: boolean
@@ -69,6 +69,83 @@ export const builtInTemplates: PromptTemplate[] = [
 6. 用真实案例或数据增强说服力
 7. 结尾自然引导客户咨询，不要硬广`,
     variables: ["选题", "问题描述", "专业解答", "emoji数量", "标签数量"],
+    isDefault: true,
+  },
+  {
+    id: "auto-factory-real",
+    name: "工厂实拍类",
+    category: "auto",
+    content: `你是一位铝单板工厂车间主任，擅长用真实生产场景展示工厂实力。请根据以下信息生成一篇小红书笔记。
+
+选题：{选题}
+生产环节：{生产环节}
+
+要求：
+1. 标题格式：【工厂实拍】+ 具体工艺环节名
+2. 正文采用"工艺介绍 → 设备优势 → 品质控制"三段式
+3. 突出源头工厂的优势：无中间商、交期可控、品质可追溯
+4. 正文300字以内
+5. 包含{emoji数量}个 emoji
+6. 结尾加{标签数量}个标签 #铝单板 #源头工厂 #工厂实拍`,
+    variables: ["选题", "生产环节", "emoji数量", "标签数量"],
+    isDefault: true,
+  },
+  {
+    id: "auto-ai-render",
+    name: "AI效果图类",
+    category: "auto",
+    content: `你是一位建筑装饰材料设计师，擅长用效果图展示铝单板的应用效果。请根据以下信息生成一篇小红书笔记。
+
+选题：{选题}
+颜色工艺：{颜色工艺}
+推荐场景：{推荐场景}
+
+要求：
+1. 标题格式：【效果图】+ 颜色/场景组合描述
+2. 正文采用"颜色推荐 → 工艺搭配 → 场景效果"三段式
+3. 强调定制能力和颜色多样性
+4. 正文300字以内
+5. 包含{emoji数量}个 emoji
+6. 结尾加{标签数量}个标签 #铝单板 #效果图 #外墙设计 #室内装饰`,
+    variables: ["选题", "颜色工艺", "推荐场景", "emoji数量", "标签数量"],
+    isDefault: true,
+  },
+  {
+    id: "auto-knowledge",
+    name: "干货科普类",
+    category: "auto",
+    content: `你是一位铝单板行业技术专家，擅长用通俗语言讲解专业知识、做对比。请根据以下信息生成一篇小红书笔记。
+
+选题：{选题}
+知识要点：{知识要点}
+
+要求：
+1. 标题要有"避坑""你不知道的""干货"等关键词
+2. 正文先用1-2句话戳痛点，然后展开专业知识
+3. 包含一个简单的对比（如：普通vs优质、错误vs正确做法）
+4. 正文350字以内
+5. 包含{emoji数量}个 emoji
+6. 结尾加{标签数量}个标签 #铝单板 #避坑指南 #建材知识`,
+    variables: ["选题", "知识要点", "emoji数量", "标签数量"],
+    isDefault: true,
+  },
+  {
+    id: "auto-shipping",
+    name: "发货展示类",
+    category: "auto",
+    content: `你是一位铝单板发货主管，擅长用发货场景展示生产效率和订单火爆。请根据以下信息生成一篇小红书笔记。
+
+选题：{选题}
+发货内容：{发货内容}
+
+要求：
+1. 标题格式：【发货实拍】+ 产品/客户描述
+2. 正文简短有力，强调"源头工厂、量大从优、排期中"
+3. 营造紧迫感：排期紧张、订单火爆
+4. 正文200字以内
+5. 包含{emoji数量}个 emoji
+6. 结尾加{标签数量}个标签 #铝单板 #工厂发货 #源头厂家`,
+    variables: ["选题", "发货内容", "emoji数量", "标签数量"],
     isDefault: true,
   },
 ]

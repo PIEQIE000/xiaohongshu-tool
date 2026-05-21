@@ -17,9 +17,9 @@ export default function PromptTemplatesPage() {
   const [editForm, setEditForm] = useState({ name: "", category: "knowledge", content: "", variables: "" })
 
   return (
-    <div className="p-6">
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold">Prompt 模板</h1>
+    <div className="p-4 md:p-6">
+      <div className="flex items-center justify-between mb-4 md:mb-6">
+        <h1 className="text-xl md:text-2xl font-bold">Prompt 模板</h1>
         <Button><Plus className="w-4 h-4 mr-1" /> 新建模板</Button>
       </div>
 

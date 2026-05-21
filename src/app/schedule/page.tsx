@@ -35,9 +35,9 @@ export default function SchedulePage() {
   const nextMonth = () => setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1))
 
   return (
-    <div className="p-6">
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold">排期日历</h1>
+    <div className="p-4 md:p-6">
+      <div className="flex items-center justify-between mb-4 md:mb-6">
+        <h1 className="text-xl md:text-2xl font-bold">排期日历</h1>
         <Button variant="outline" onClick={() => {}}>
           <Link2 className="w-4 h-4 mr-1" /> 跳转小红书发布
         </Button>
@@ -62,7 +62,7 @@ export default function SchedulePage() {
               <div key={d} className="text-center text-xs text-muted-foreground py-2 font-medium">{d}</div>
             ))}
             {Array.from({ length: firstDay }).map((_, i) => (
-              <div key={`empty-${i}`} className="min-h-[80px]" />
+              <div key={`empty-${i}`} className="min-h-[50px] md:min-h-[80px]" />
             ))}
             {Array.from({ length: daysInMonth }).map((_, i) => {
               const day = i + 1
@@ -71,7 +71,7 @@ export default function SchedulePage() {
               return (
                 <div
                   key={day}
-                  className={`min-h-[80px] border rounded-lg p-1 ${
+                  className={`min-h-[60px] md:min-h-[80px] border rounded-lg p-1 ${
                     isToday ? "border-violet-300 bg-violet-50" : "border-border"
                   }`}
                 >

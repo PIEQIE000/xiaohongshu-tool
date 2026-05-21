@@ -21,6 +21,7 @@ export function Sidebar({ className, open, onClose }: SidebarProps) {
     { label: "素材库", href: "/materials" },
     { label: "拍摄任务", href: "/tasks" },
     { label: "数据复盘", href: "/analytics" },
+    { label: "策略建议", href: "/strategy" },
     { label: "Prompt 模板", href: "/prompt-templates" },
     { label: "设置", href: "/settings" },
   ]

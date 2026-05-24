@@ -11,6 +11,8 @@ export async function PUT(
     const asset = await prisma.asset.update({
       where: { id },
       data: {
+        type: body.type,
+        typeSource: body.typeSource,
         usageCount: body.usageCount,
         lastUsedAt: body.lastUsedAt ? new Date(body.lastUsedAt) : undefined,
         isFatigued: body.isFatigued,

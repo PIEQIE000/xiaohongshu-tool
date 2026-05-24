@@ -14,6 +14,7 @@ export async function PUT(
       tags: body.tags,
       status: body.status,
       note: body.note,
+      contentType: body.contentType,
     },
   })
   return NextResponse.json(topic)

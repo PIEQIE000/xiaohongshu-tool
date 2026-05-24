@@ -8,14 +8,15 @@ datasource db {
 }
 
 model Topic {
-  id        String   @id @default(uuid())
-  title     String
-  tags      String   @default("")
-  status    String   @default("pending")
-  note      String   @default("")
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  contents  Content[]
+  id          String   @id @default(uuid())
+  title       String
+  tags        String   @default("")
+  status      String   @default("pending")
+  note        String   @default("")
+  contentType String   @default("knowledge")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  contents    Content[]
 }
 
 model Content {
@@ -31,6 +32,12 @@ model Content {
   publishHook     String          @default("私信发图纸，源头工厂直接报价。主页有联系方式，没有中间商差价。")
   scheduledAt     String?
   publishedAt     String?
+  status          String          @default("draft")  // draft | pending | scheduled | published
+  reviewScore     Int?
+  reviewFeedback  String          @default("")
+  reviewedAt      String?
+  imagePrompt     String          @default("")
+  imagePrompts    String          @default("[]")
   createdAt       DateTime        @default(now())
   updatedAt       DateTime        @updatedAt
   calendarEntries CalendarEntry[]
@@ -40,6 +47,7 @@ model Content {
 model Asset {
   id         String    @id @default(uuid())
   type       String
+  typeSource String    @default("ai")   // manual | ai
   url        String
   title      String    @default("")
   tags       String    @default("")
@@ -101,4 +109,11 @@ model MaterialTask {
   dueDate       String?
   completedAt   DateTime?
   createdAt     DateTime  @default(now())
+}
+
+model ContentStrategy {
+  id          String   @id @default(uuid())
+  key         String   @unique
+  value       String
+  updatedAt   DateTime @updatedAt
 }

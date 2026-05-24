@@ -15,6 +15,7 @@ export function Sidebar({ className, open, onClose }: SidebarProps) {
   const pathname = usePathname()
 
   const navItems = [
+    { label: "首页", href: "/" },
     { label: "选题管理", href: "/topics" },
     { label: "内容创作", href: "/content" },
     { label: "排期日历", href: "/schedule" },
@@ -22,12 +23,18 @@ export function Sidebar({ className, open, onClose }: SidebarProps) {
     { label: "拍摄任务", href: "/tasks" },
     { label: "数据复盘", href: "/analytics" },
     { label: "策略建议", href: "/strategy" },
+    { label: "内容策略", href: "/content-strategy" },
     { label: "Prompt 模板", href: "/prompt-templates" },
+    { label: "行业知识库", href: "/knowledge" },
     { label: "设置", href: "/settings" },
   ]
 
   const handleNav = (e: React.MouseEvent, href: string) => {
-    if (pathname === href || pathname.startsWith(href)) return
+    if (href === "/") {
+      if (pathname === "/") return
+    } else {
+      if (pathname === href || pathname.startsWith(href)) return
+    }
     onClose?.()
   }
 

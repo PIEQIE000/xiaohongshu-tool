@@ -222,19 +222,25 @@ export default function StrategyPage() {
               <Button
                 size="sm"
                 onClick={() => {
-                  const ratios: Record<string, number> = { factory_real: 30, ai_render: 30, knowledge: 25, shipping: 15 }
-                  if (data.typePerformance.length >= 4) {
-                    const top = data.typePerformance[0].type
-                    const bottom = data.typePerformance[data.typePerformance.length - 1].type
-                    ratios[top] = Math.min(40, (ratios[top] || 30) + 10)
-                    ratios[bottom] = Math.max(10, (ratios[bottom] || 15) - 10)
+                  const raw = localStorage.getItem("auto_gen_config")
+                  let config: any = {}
+                  if (raw) {
+                    try { config = JSON.parse(raw) } catch {}
                   }
-                  try {
-                    const saved = JSON.parse(localStorage.getItem("autogen_config") || "{}")
-                    saved.contentTypeRatios = ratios
-                    localStorage.setItem("autogen_config", JSON.stringify(saved))
-                    alert("配比已更新")
-                  } catch {}
+
+                  const ratios: Record<string, number> = config.contentTypeRatios || { factory_real: 30, ai_render: 30, knowledge: 25, shipping: 15 }
+
+                  if (data.typePerformance.length >= 2) {
+                    const sorted = [...data.typePerformance].sort((a, b) => parseFloat(b.engagementRate) - parseFloat(a.engagementRate))
+                    const best = sorted[0]
+                    const worst = sorted[sorted.length - 1]
+                    ratios[best.type] = Math.min(50, (ratios[best.type] || 25) + 10)
+                    ratios[worst.type] = Math.max(5, (ratios[worst.type] || 25) - 10)
+                  }
+
+                  config.contentTypeRatios = ratios
+                  localStorage.setItem("auto_gen_config", JSON.stringify(config))
+                  alert("配比已更新到自动生成配置")
                 }}
               >
                 <Zap className="w-3.5 h-3.5 mr-1" /> 应用配比

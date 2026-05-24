@@ -13,9 +13,18 @@ export async function GET(request: Request) {
   const topics = await prisma.topic.findMany({
     where,
     orderBy: { updatedAt: "desc" },
+    include: {
+      _count: { select: { contents: true } },
+    },
   })
 
-  return NextResponse.json(topics)
+  const result = topics.map(t => ({
+    ...t,
+    contentCount: t._count.contents,
+    _count: undefined,
+  }))
+
+  return NextResponse.json(result)
 }
 
 export async function POST(request: Request) {
@@ -26,6 +35,7 @@ export async function POST(request: Request) {
       tags: body.tags || "",
       status: body.status || "pending",
       note: body.note || "",
+      contentType: body.contentType || "knowledge",
     },
   })
   return NextResponse.json(topic)

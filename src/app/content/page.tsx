@@ -526,6 +526,11 @@ function ContentPageInner() {
 
   const handleCopyPrompt = (text: string) => navigator.clipboard.writeText(text)
 
+  const handleCopyForPublish = (item: ContentItem) => {
+    const text = `${item.title}\n\n${item.body}`
+    navigator.clipboard.writeText(text)
+  }
+
   const filteredContent = activeTab === "drafts" ? allContent.filter(c => c.status === "draft")
     : activeTab === "pending" ? allContent.filter(c => c.status === "pending")
     : activeTab === "published" ? allContent.filter(c => c.status === "published") : []
@@ -604,10 +609,16 @@ function ContentPageInner() {
                         <Button variant="ghost" size="sm" title="审核通过，移入待发布" onClick={() => updateContentStatus(item.id, "pending")}>
                           <Check className="w-3.5 h-3.5 text-green-600" />
                         </Button>
+                        <Button variant="ghost" size="sm" title="复制内容" onClick={() => handleCopyForPublish(item)}>
+                          <Copy className="w-3.5 h-3.5 text-violet-500" />
+                        </Button>
                       </>
                     )}
                     {item.status === "pending" && (
                       <>
+                        <Button variant="ghost" size="sm" title="一键复制（标题+正文）" onClick={() => handleCopyForPublish(item)}>
+                          <Copy className="w-3.5 h-3.5 text-violet-500" />
+                        </Button>
                         <Button variant="ghost" size="sm" title="标记为已发布" onClick={() => updateContentStatus(item.id, "published")}>
                           <Eye className="w-3.5 h-3.5 text-green-600" />
                         </Button>
@@ -617,9 +628,14 @@ function ContentPageInner() {
                       </>
                     )}
                     {item.status === "published" && (
-                      <Button variant="ghost" size="sm" title="退回草稿" onClick={() => updateContentStatus(item.id, "draft")}>
-                        <RotateCcw className="w-3.5 h-3.5 text-gray-500" />
-                      </Button>
+                      <>
+                        <Button variant="ghost" size="sm" title="复制内容" onClick={() => handleCopyForPublish(item)}>
+                          <Copy className="w-3.5 h-3.5 text-violet-500" />
+                        </Button>
+                        <Button variant="ghost" size="sm" title="退回草稿" onClick={() => updateContentStatus(item.id, "draft")}>
+                          <RotateCcw className="w-3.5 h-3.5 text-gray-500" />
+                        </Button>
+                      </>
                     )}
                     <Button variant="ghost" size="sm" className="text-red-400" onClick={() => deleteContent(item.id)}>
                       <Trash2 className="w-3.5 h-3.5" />

@@ -8,7 +8,7 @@ const createPrismaClient = () => {
   const tursoUrl = process.env.TURSO_DATABASE_URL
   if (tursoUrl) {
     const libsql = createClient({ url: tursoUrl, authToken: process.env.TURSO_AUTH_TOKEN })
-    const adapter = new PrismaLibSql(libsql)
+    const adapter = new PrismaLibSql({ client: libsql })
     return new PrismaClient({ adapter })
   }
   return new PrismaClient()

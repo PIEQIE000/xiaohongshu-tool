@@ -20,7 +20,7 @@ async function main() {
 
   console.log("连接 Turso...")
   const libsql = createClient({ url: tursoUrl, authToken: tursoToken })
-  const adapter = new PrismaLibSql(libsql)
+  const adapter = new PrismaLibSql({ client: libsql })
   const tursoDb = new PrismaClient({ adapter })
 
   try {

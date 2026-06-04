@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma"
 const materialTypes = [
   "production_line", "spray_line", "raw_material", "finished_product",
   "packing_shipping", "detail_closeup", "color_swatch", "ai_render",
+  "construction",
 ]
 
 export async function GET() {
@@ -19,6 +20,7 @@ export async function GET() {
       detail_closeup: "细节特写",
       color_swatch: "色板",
       ai_render: "AI效果图",
+      construction: "现场施工安装",
     }
 
     const coverage = materialTypes.map((t) => {

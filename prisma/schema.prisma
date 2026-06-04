@@ -117,3 +117,12 @@ model ContentStrategy {
   value       String
   updatedAt   DateTime @updatedAt
 }
+
+model ShareLink {
+  id         String   @id @default(uuid())
+  token      String   @unique
+  assetIds   String   @default("[]")  // JSON array of asset IDs
+  expiresAt  DateTime
+  viewCount  Int      @default(0)
+  createdAt  DateTime @default(now())
+}

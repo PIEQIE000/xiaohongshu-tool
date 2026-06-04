@@ -2,11 +2,11 @@
 
 import { useState, useEffect, useRef, useCallback } from "react"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
 import { Card, CardContent } from "@/components/ui/card"
-import { Upload, Image as ImageIcon, Crop, Trash2, Check, RefreshCw, Sparkles } from "lucide-react"
+import { Upload, Image as ImageIcon, Crop, Trash2, Check, RefreshCw, Sparkles, Share2 } from "lucide-react"
 import { FatigueBadge } from "@/components/FatigueBadge"
 import { MaterialCoveragePanel } from "@/components/MaterialCoveragePanel"
+import { ImageLightbox } from "@/components/ImageLightbox"
 
 const typeLabels: Record<string, string> = {
   production_line: "生产线",
@@ -17,6 +17,7 @@ const typeLabels: Record<string, string> = {
   detail_closeup: "细节特写",
   color_swatch: "色板",
   ai_render: "AI效果图",
+  construction: "现场施工安装",
 }
 
 type Asset = {
@@ -51,6 +52,9 @@ export default function MaterialsPage() {
   const [editingTypeId, setEditingTypeId] = useState<string | null>(null)
   const [classifyingId, setClassifyingId] = useState<string | null>(null)
   const [classifyMsg, setClassifyMsg] = useState<Record<string, string>>({})
+
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
 
   useEffect(() => {
     fetchAssets()
@@ -195,6 +199,60 @@ export default function MaterialsPage() {
     fetchAssets()
   }
 
+  const toggleSelect = (id: string) => {
+    setSelectedIds((prev) => {
+      const next = new Set(prev)
+      if (next.has(id)) next.delete(id)
+      else next.add(id)
+      return next
+    })
+  }
+
+  const openLightbox = (index: number) => {
+    setLightboxIndex(index)
+  }
+
+  const handleMultiShare = async () => {
+    if (selectedIds.size === 0) return
+    const selectedAssets = assets.filter((a) => selectedIds.has(a.id))
+
+    const canShare = typeof navigator !== "undefined" && !!navigator.share && !!navigator.canShare
+    if (!canShare) {
+      // 桌面端降级：逐个下载
+      for (const asset of selectedAssets) {
+        try {
+          const res = await fetch(asset.url)
+          const blob = await res.blob()
+          const url = URL.createObjectURL(blob)
+          const a = document.createElement("a")
+          a.href = url
+          a.download = asset.title || "image"
+          document.body.appendChild(a)
+          a.click()
+          document.body.removeChild(a)
+          URL.revokeObjectURL(url)
+        } catch {}
+      }
+      return
+    }
+
+    try {
+      const files = await Promise.all(
+        selectedAssets.map(async (asset) => {
+          const res = await fetch(asset.url)
+          const blob = await res.blob()
+          const ext = asset.url.split(".").pop()?.split("?")[0] || "jpeg"
+          return new File([blob], `${asset.title || "image"}.${ext}`, { type: blob.type })
+        })
+      )
+      await navigator.share({ files })
+    } catch (e: any) {
+      if (e?.name !== "AbortError") {
+        alert("分享失败，请尝试下载")
+      }
+    }
+  }
+
   const startCrop = (src: string) => {
     setCropSrc(src)
     setCropResult("")
@@ -290,6 +348,16 @@ export default function MaterialsPage() {
       <div className="flex items-center justify-between mb-4 md:mb-6">
         <h1 className="text-xl md:text-2xl font-bold">素材库</h1>
         <div className="flex gap-1.5 md:gap-2">
+          {selectedIds.size > 0 && (
+            <>
+              <Button variant="default" size="sm" onClick={handleMultiShare} className="bg-violet-600">
+                <Share2 className="w-4 h-4 mr-1" /> 分享 ({selectedIds.size})
+              </Button>
+              <Button variant="outline" size="sm" onClick={() => setSelectedIds(new Set())}>
+                取消选择
+              </Button>
+            </>
+          )}
           <Button variant="outline" size="sm" onClick={handleBatchClassify}>
             AI 识别分类
           </Button>
@@ -373,10 +441,32 @@ export default function MaterialsPage() {
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4 mt-4 md:mt-6">
-            {assets.map((asset) => (
+            {assets.map((asset, idx) => (
               <div key={asset.id} className="group relative rounded-2xl bg-gray-100">
-                <div className="rounded-2xl overflow-hidden">
+                <div
+                  className="rounded-2xl overflow-hidden cursor-pointer relative"
+                  onClick={() => openLightbox(idx)}
+                >
                   <img src={asset.url} alt={asset.title} className="w-full aspect-square object-cover" />
+                  {/* 多选复选框 */}
+                  <div
+                    className="absolute top-1.5 right-1.5 z-10"
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      toggleSelect(asset.id)
+                    }}
+                  >
+                    <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors ${
+                      selectedIds.has(asset.id)
+                        ? "bg-violet-600 border-violet-600"
+                        : "border-white/60 bg-black/30"
+                    }`}>
+                      {selectedIds.has(asset.id) && <Check className="w-3 h-3 text-white" />}
+                    </div>
+                  </div>
+                  {selectedIds.has(asset.id) && (
+                    <div className="absolute inset-0 bg-violet-500/10 pointer-events-none" />
+                  )}
                 </div>
                 <div className="absolute top-1.5 md:top-2 left-1.5 md:left-2">
                   <FatigueBadge usageCount={asset.usageCount} isFatigued={asset.isFatigued} />
@@ -422,7 +512,8 @@ export default function MaterialsPage() {
                     </span>
                   )}
                 </div>
-                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100 z-0 pointer-events-none group-hover:pointer-events-auto">
+                {/* hover 浮层仅桌面端显示，避免触屏设备 tap 时挡住点击放大 */}
+                <div className="hidden md:flex absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors items-center justify-center gap-2 opacity-0 group-hover:opacity-100 z-0 pointer-events-none group-hover:pointer-events-auto">
                   <Button size="sm" variant="secondary" onClick={() => startCrop(asset.url)}>
                     <Crop className="w-4 h-4" />
                   </Button>
@@ -489,6 +580,16 @@ export default function MaterialsPage() {
             </div>
           </Card>
         </div>
+      )}
+
+      {lightboxIndex !== null && (
+        <ImageLightbox
+          images={assets.map((a) => ({ id: a.id, url: a.url, title: a.title }))}
+          currentIndex={lightboxIndex}
+          onClose={() => setLightboxIndex(null)}
+          onSelect={toggleSelect}
+          selectedIds={selectedIds}
+        />
       )}
     </div>
   )

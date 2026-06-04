@@ -104,7 +104,7 @@ export default function Home() {
     autoCheckAndCreateTasks()
   }, [])
 
-  const accessUrl = localIp ? `http://${localIp}:3000` : ""
+  const accessUrl = localIp ? `http://${localIp}:${window.location.port || "3001"}` : ""
 
   useEffect(() => {
     autoCheckAndCreateTasks()

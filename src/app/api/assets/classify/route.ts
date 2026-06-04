@@ -47,6 +47,7 @@ const typeLabels: Record<string, string> = {
   detail_closeup: "细节特写",
   color_swatch: "色板",
   ai_render: "AI效果图",
+  construction: "现场施工安装",
 }
 
 const classificationPrompt = `你是铝单板工厂的素材分类专家。分析这张图片，判断它属于以下哪个类别，只返回类别英文 key，不要解释。
@@ -55,6 +56,7 @@ const classificationPrompt = `你是铝单板工厂的素材分类专家。分�
 - 如果是小块的色板、色卡、颜色样板（通常放在桌上、手拿着、多色并排）→ color_swatch
 - 如果是大块的铝板、安装在建筑上的金属板、完成的幕墙产品 → finished_product
 - 如果是3D渲染效果图、电脑制图、合成图 → ai_render
+- 如果是工地现场、工人安装、脚手架、打胶、固定挂件 → construction
 
 具体类别：
 - color_swatch: 色板/色卡（小尺寸、多色并排、手拿、桌面展示、木纹石纹转印样片）
@@ -65,6 +67,7 @@ const classificationPrompt = `你是铝单板工厂的素材分类专家。分�
 - packing_shipping: 打包发货（木架木箱包装、装车运输、仓库堆货待发）
 - detail_closeup: 细节特写（板材表面纹理、钻孔、角码、加强筋、焊接缝）
 - ai_render: AI效果图（3D渲染、建筑外观效果图、电脑合成、非真实拍摄）
+- construction: 现场施工安装（工地现场、工人安装作业、脚手架、打胶固定、挂件连接、幕墙施工现场）
 
 只返回一个单词`
 

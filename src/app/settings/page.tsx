@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Sparkles, Eye, Zap } from "lucide-react"
+import { UserManagement } from "@/components/UserManagement"
 
 const DEFAULT_RATIOS = { factory_real: 30, ai_render: 30, knowledge: 25, shipping: 15 }
 const DEFAULT_HOURS = "12, 18, 21"
@@ -232,6 +233,12 @@ export default function SettingsPage() {
                 保存配置
               </Button>
             </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardContent className="py-6">
+            <UserManagement />
           </CardContent>
         </Card>
       </div>

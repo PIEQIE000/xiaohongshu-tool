@@ -2,3 +2,6 @@ node_modules/
 .next/
 prisma/dev.db
 .env
+public/uploads/*
+build.log
+*.tsbuildinfo
